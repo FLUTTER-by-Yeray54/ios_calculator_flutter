@@ -111,74 +111,77 @@ class _CalculadoraState extends State<Calculadora> {
           ),
           Expanded(
             flex: 2,
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: buttons.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 4,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: buttons.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 4,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      switch (index) {
+                        case 0:
+                          setState(() {
+                            userInput = '';
+                            answer = '0';
+                          });
+                          break;
+                        case 1:
+                          setState(() {
+                            if (userInput.isNotEmpty) {
+                              int number = int.parse(userInput);
+                              userInput = (-number).toString();
+                            }
+                          });
+                          break;
+                        case 3:
+                          setState(() {
+                            userInput =
+                                userInput.substring(0, userInput.length - 1);
+                          });
+                          break;
+                        case 18:
+                          setState(() {
+                            equalPressed();
+                          });
+                          break;
+                        default:
+                          setState(() {
+                            userInput += buttons[index];
+                          });
+                          break;
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: (isOperator(buttons[index]))
+                          ? Colors.orange
+                          : (isRemove(buttons[index]))
+                              ? const Color.fromRGBO(165, 165, 165, 1)
+                              : const Color.fromRGBO(51, 51, 51, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    child: Text(
+                      buttons[index],
+                      style: TextStyle(
+                        color: (isRemove(buttons[index]))
+                            ? Colors.black
+                            : Colors.white,
+                        fontSize:
+                            (buttons[index] == "DEL")
+                                ? 23
+                                : 30,
+                      ),
+                    ),
+                  );
+                },
               ),
-              itemBuilder: (BuildContext context, int index) {
-                return ElevatedButton(
-                  onPressed: () {
-                    switch (index) {
-                      case 0:
-                        setState(() {
-                          userInput = '';
-                          answer = '0';
-                        });
-                        break;
-                      case 1:
-                        setState(() {
-                          if (userInput.isNotEmpty) {
-                            int number = int.parse(userInput);
-                            userInput = (-number).toString();
-                          }
-                        });
-                        break;
-                      case 3:
-                        setState(() {
-                          userInput =
-                              userInput.substring(0, userInput.length - 1);
-                        });
-                        break;
-                      case 18:
-                        setState(() {
-                          equalPressed();
-                        });
-                        break;
-                      default:
-                        setState(() {
-                          userInput += buttons[index];
-                        });
-                        break;
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: (isOperator(buttons[index]))
-                        ? Colors.orange
-                        : (isRemove(buttons[index]))
-                            ? const Color.fromRGBO(165, 165, 165, 1)
-                            : const Color.fromRGBO(51, 51, 51, 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                  child: Text(
-                    buttons[index],
-                    style: TextStyle(
-                      color: (isRemove(buttons[index]))
-                          ? Colors.black
-                          : Colors.white,
-                      fontSize:
-                          (buttons[index] == "DEL" || buttons[index] == "+/-")
-                              ? 26
-                              : 30,
-                    ),
-                  ),
-                );
-              },
             ),
           ),
         ],
